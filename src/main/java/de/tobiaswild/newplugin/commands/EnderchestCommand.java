@@ -1,7 +1,7 @@
 package de.tobiaswild.newplugin.commands;
 
 import de.tobiaswild.newplugin.Main;
-import de.tobiaswild.newplugin.utils.backpack.Backpack;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -13,39 +13,37 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BackpackCommand implements CommandExecutor, TabCompleter {
+public class EnderchestCommand implements CommandExecutor, TabCompleter {
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         if(!(sender instanceof Player player)) {
             Main.noPlayer(sender);
             return false;
         }
-        if (!player.hasPermission(Main.PERMISSION + "backpack")) {
-            Main.noPermission(player);
+        if (!sender.hasPermission(Main.PERMISSION + "enderchest")) {
+            Main.noPermission(sender);
             return false;
         }
         if (args.length == 0) {
-            Backpack backpack = Main.getInstance().getBackpackManager().getBackpack(player.getUniqueId());
-            player.openInventory(backpack.getInventory());
-            player.sendMessage(Main.SUCCESS + "Opened your Backpack");
+            player.openInventory(player.getEnderChest());
+            player.sendMessage(Main.SUCCESS + "Opened you EnderChest");
             return true;
         }
         if (args.length == 1) {
-            if (!player.hasPermission("backpack.command.other")) {
+            if (!player.hasPermission(Main.PERMISSION + "enderchest.other")) {
                 Main.noPermission(player);
                 return false;
             }
-            Player target = Bukkit.getOfflinePlayer(args[0]).getPlayer();
+            Player target = Bukkit.getPlayer(args[0]);
             if (target != null) {
-                Backpack backpack = Main.getInstance().getBackpackManager().getBackpack(target.getUniqueId());
-                player.openInventory(backpack.getInventory());
-                player.sendMessage(Main.SUCCESS + "Opened " + target + "'s backpack");
+                player.openInventory(target.getEnderChest());
+                player.sendMessage(Main.SUCCESS + "Opened " + target.getDisplayName() + "'s EnderChest");
                 return true;
             }
-            player.sendMessage(Main.ERROR + "The player " + args[0] + " is not online");
+            player.sendMessage(Main.ERROR + "The Player " + args[0] + " is offline");
             return false;
         }
-        player.sendMessage(Main.INFO + "Usage: /backpack [<player>]");
+        player.sendMessage(Main.INFO + "Usage: /enderchest [<player>]");
         return false;
     }
 
@@ -55,15 +53,17 @@ public class BackpackCommand implements CommandExecutor, TabCompleter {
         if (args.length == 0) {
             return list;
         }
-        if (args.length == 1) {
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                list.add(player.getName());
+        if (sender.hasPermission("essentials.enderchest.other")) {
+            if (args.length == 1) {
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    list.add(player.getName());
+                }
             }
         }
         ArrayList<String> comList = new ArrayList<>();
         String current = args[args.length-1].toLowerCase();
         for (String s1 : list) {
-            if (s1.contains(current)) {
+            if (s1.startsWith(current)) {
                 comList.add(s1);
             }
         }

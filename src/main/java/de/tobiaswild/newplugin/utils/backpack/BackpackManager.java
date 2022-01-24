@@ -1,4 +1,4 @@
-package de.tobiaswild.newplugin.backpack;
+package de.tobiaswild.newplugin.utils.backpack;
 
 import de.tobiaswild.newplugin.Main;
 import de.tobiaswild.newplugin.utils.Config;

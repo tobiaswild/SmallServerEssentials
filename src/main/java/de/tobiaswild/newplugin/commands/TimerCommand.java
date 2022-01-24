@@ -1,6 +1,6 @@
 package de.tobiaswild.newplugin.commands;
 
-import de.tobiaswild.newplugin.timer.Timer;
+import de.tobiaswild.newplugin.utils.timer.Timer;
 import de.tobiaswild.newplugin.Main;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -16,7 +16,7 @@ public class TimerCommand implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         Timer timer = Main.getInstance().getTimer();
 
-        if (!sender.hasPermission("timer.use")) {
+        if (!sender.hasPermission(Main.PERMISSION + "timer")) {
             Main.noPermission(sender);
             return false;
         }
@@ -28,11 +28,11 @@ public class TimerCommand implements CommandExecutor, TabCompleter {
             case "resume" -> {
                 if (!timer.isHidden()) {
                     if (timer.isRunning()) {
-                        Main.sendToSender(sender,ChatColor.RED + "timer already running");
+                        sender.sendMessage(Main.ERROR + "timer already running");
                         return false;
                     }
                     timer.setRunning(true);
-                    Main.sendToAll(ChatColor.GREEN + "timer started");
+                    Main.getInstance().getServer().getConsoleSender().sendMessage(Main.SUCCESS + "timer started");
                     return true;
                 }
                 Main.notPossible(sender);
@@ -41,11 +41,11 @@ public class TimerCommand implements CommandExecutor, TabCompleter {
             case "pause" -> {
                 if (!timer.isHidden()) {
                     if (!timer.isRunning()) {
-                        Main.sendToSender(sender,ChatColor.RED + "timer already stopped");
+                        sender.sendMessage(Main.ERROR + "timer already stopped");
                         return false;
                     }
                     timer.setRunning(false);
-                    Main.sendToAll(ChatColor.GREEN + "timer stopped");
+                    Main.getInstance().getServer().getConsoleSender().sendMessage(Main.SUCCESS + "timer stopped");
                     return true;
                 }
                 Main.notPossible(sender);
@@ -54,15 +54,15 @@ public class TimerCommand implements CommandExecutor, TabCompleter {
             case "set" -> {
                 if (!timer.isHidden()) {
                     if (args.length != 2) {
-                        Main.sendToSender(sender,"Usage: /timer time <time>");
+                        sender.sendMessage("Usage: /timer time <time>");
                         return false;
                     }
                     try {
                         timer.setRunning(false);
                         timer.setTime(Integer.parseInt(args[1]));
-                        Main.sendToSender(sender,ChatColor.GREEN + "timer set to " + args[1]);
+                        sender.sendMessage(Main.SUCCESS + "timer set to " + args[1]);
                     } catch (NumberFormatException e) {
-                        Main.sendToSender(sender,ChatColor.RED + "second parameter has to be a int!");
+                        sender.sendMessage(Main.ERROR + "second parameter has to be a int!");
                     }
                     break;
                 }
@@ -73,7 +73,7 @@ public class TimerCommand implements CommandExecutor, TabCompleter {
                 if (!timer.isHidden()) {
                     timer.setRunning(false);
                     timer.setTime(0);
-                    Main.sendToSender(sender,ChatColor.GREEN + "timer reset");
+                    sender.sendMessage(Main.SUCCESS + "timer reset");
                     return true;
                 }
                 Main.notPossible(sender);
@@ -82,20 +82,20 @@ public class TimerCommand implements CommandExecutor, TabCompleter {
             case "show" -> {
                 if (timer.isHidden()) {
                     timer.setHidden(false);
-                    Main.sendToAll(ChatColor.GREEN + "shown");
+                    Main.getInstance().getServer().getConsoleSender().sendMessage(Main.SUCCESS + "shown");
                     return true;
                 } else {
-                    Main.sendToSender(sender,ChatColor.RED + "timer already shown");
+                    sender.sendMessage(Main.ERROR + "timer already shown");
                     return false;
                 }
             }
             case "hide" -> {
                 if (!timer.isHidden()) {
                     timer.setHidden(true);
-                    Main.sendToAll(ChatColor.GREEN + "hidden");
+                    Main.getInstance().getServer().getConsoleSender().sendMessage(Main.SUCCESS + "hidden");
                     return true;
                 } else {
-                    Main.sendToSender(sender,ChatColor.RED + "timer already hidden");
+                    sender.sendMessage(Main.ERROR + "timer already hidden");
                     return false;
                 }
             }
@@ -140,7 +140,7 @@ public class TimerCommand implements CommandExecutor, TabCompleter {
     }
 
     public static void sendUsage(CommandSender sender) {
-        Main.sendToSender(sender,"""
+        sender.sendMessage("""
                 Usage:
                 /timer resume
                 /timer pause

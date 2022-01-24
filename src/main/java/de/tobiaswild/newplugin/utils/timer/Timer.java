@@ -1,4 +1,4 @@
-package de.tobiaswild.newplugin.timer;
+package de.tobiaswild.newplugin.utils.timer;
 
 import de.tobiaswild.newplugin.Main;
 import de.tobiaswild.newplugin.utils.Config;

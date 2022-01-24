@@ -11,7 +11,7 @@ public class Config {
     private final YamlConfiguration config;
 
     public Config() {
-        File dir = new File("./plugins/Backpack");
+        File dir = new File("./plugins/NewPlugin");
         if (!dir.exists()) {
             dir.mkdir();
         }

@@ -1,4 +1,4 @@
-package de.tobiaswild.newplugin.backpack;
+package de.tobiaswild.newplugin.utils.backpack;
 
 import de.tobiaswild.newplugin.utils.Base64;
 import org.bukkit.Bukkit;
