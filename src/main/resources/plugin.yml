@@ -1,0 +1,14 @@
+name: NewPlugin
+version: '${project.version}'
+main: de.tobiaswild.newplugin.Main
+api-version: 1.18
+authors: [ tobiaswild ]
+website: https.//github.com/tobiaswild/
+commands:
+  backpack:
+    aliases:
+      - bp
+      - rucksack
+    description: open the backpack
+  timer:
+    description: controll the timer
