@@ -1,55 +1,51 @@
 package de.tobiaswild.newplugin.commands;
 
-import de.tobiaswild.newplugin.Main;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.List;
+import de.tobiaswild.newplugin.Main;
 
 public class HealCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if(!(sender instanceof Player player)) {
-            Main.noPlayer(sender);
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage(Main.NO_PLAYER);
             return false;
         }
         if (!player.hasPermission(Main.PERMISSION + "heal")) {
-            Main.noPermission(player);
+            player.sendMessage(Main.NO_PERMISSION);
             return false;
         }
         if (args.length == 0) {
-            if(!(player.getGameMode() == GameMode.SURVIVAL)) {
-                Main.wrongGamemode(player, GameMode.SURVIVAL);
-                return false;
-            }
-            player.setHealth(20);
-            player.setSaturation(20);
-            player.setRemainingAir(300);
-            player.sendMessage(ChatColor.GREEN + "Du wurdest geheilt");
+            healPlayer(player);
             return true;
         }
         if (args.length == 1) {
             String targetName = args[0];
-            Player target = Bukkit.getOfflinePlayer(targetName).getPlayer();
+            Player target = Bukkit.getPlayer(targetName);
             if (target != null) {
-                target.setHealth(20);
-                target.setSaturation(30);
-                target.setRemainingAir(300);
-                target.sendMessage(ChatColor.GREEN + "Du wurdest geheilt");
-                sender.sendMessage(ChatColor.GREEN + "Du hast " + target.getName() + " geheilt");
+                healPlayer(target);
+                sender.sendMessage(Main.SUCCESS + "You healed " + target.getDisplayName());
                 return true;
             }
             return false;
         }
-        return true;
+        return false;
+    }
+
+    public void healPlayer(Player player) {
+        player.setHealth(20);
+        player.setFoodLevel(20);
+        player.setSaturation(20);
+        player.setRemainingAir(300);
+        player.sendMessage(Main.SUCCESS + "You got healed");
     }
 
     @Override
@@ -64,16 +60,12 @@ public class HealCommand implements CommandExecutor, TabCompleter {
             }
         }
         ArrayList<String> comList = new ArrayList<>();
-        String current = args[args.length-1].toLowerCase();
+        String current = args[args.length - 1].toLowerCase();
         for (String s1 : list) {
             if (s1.startsWith(current)) {
                 comList.add(s1);
             }
         }
         return comList;
-    }
-
-    public void sendUsage(CommandSender sender) {
-
     }
 }

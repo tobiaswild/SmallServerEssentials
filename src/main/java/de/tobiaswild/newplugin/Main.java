@@ -1,32 +1,49 @@
 package de.tobiaswild.newplugin;
 
-import de.tobiaswild.newplugin.commands.*;
-import de.tobiaswild.newplugin.listeners.*;
-import de.tobiaswild.newplugin.utils.timer.Timer;
-import de.tobiaswild.newplugin.utils.Config;
-import de.tobiaswild.newplugin.utils.backpack.BackpackManager;
+import java.util.HashMap;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.HashMap;
+import de.tobiaswild.newplugin.commands.BackpackCommand;
+import de.tobiaswild.newplugin.commands.ClearChatCommand;
+import de.tobiaswild.newplugin.commands.EnderchestCommand;
+import de.tobiaswild.newplugin.commands.FlyCommand;
+import de.tobiaswild.newplugin.commands.FreezeCommand;
+import de.tobiaswild.newplugin.commands.GamemodeCommand;
+import de.tobiaswild.newplugin.commands.HealCommand;
+import de.tobiaswild.newplugin.commands.IpCommand;
+import de.tobiaswild.newplugin.commands.PingCommand;
+import de.tobiaswild.newplugin.commands.SeeCommand;
+import de.tobiaswild.newplugin.commands.TimerCommand;
+import de.tobiaswild.newplugin.commands.TopCommand;
+import de.tobiaswild.newplugin.commands.VanishCommand;
+import de.tobiaswild.newplugin.listeners.ChatListener;
+import de.tobiaswild.newplugin.listeners.ConnectionListener;
+import de.tobiaswild.newplugin.listeners.DeathListener;
+import de.tobiaswild.newplugin.listeners.FreezeListener;
+import de.tobiaswild.newplugin.utils.BackpackManager;
+import de.tobiaswild.newplugin.utils.Config;
+import de.tobiaswild.newplugin.utils.Timer;
 
 public final class Main extends JavaPlugin {
     private static Main instance;
     private Timer timer;
     private Config config;
     private BackpackManager backpackManager;
-    public static final String
-            PERMISSION  = "newplugin.",
-            PREFIX      = ChatColor.GRAY + "[" + ChatColor.BLUE + "NP" + ChatColor.GRAY + "]" + ChatColor.RESET + " ",
-            ERROR       = PREFIX + ChatColor.RED,
-            INFO        = PREFIX + ChatColor.YELLOW,
-            SUCCESS     = PREFIX + ChatColor.GREEN;
+    public static final String PERMISSION = "newplugin.",
+            PREFIX = "",
+            ERROR = PREFIX + ChatColor.RED,
+            INFO = PREFIX + ChatColor.YELLOW,
+            SUCCESS = PREFIX + ChatColor.GREEN,
+            NO_PLAYER = ERROR + "You have to be a player.",
+            NO_PERMISSION = ERROR + "You are not allowed to do this.",
+            NOT_POSSIBLE = ERROR + "this is currently not possible.";
     private final HashMap<Player, Location> frozenPlayers = new HashMap<>();
 
     @Override
@@ -51,50 +68,51 @@ public final class Main extends JavaPlugin {
 
     public void init(PluginManager pluginManager) {
         // Commands
-        this.getCommand("backpack").setExecutor(new BackpackCommand());
+        this.getCommand("backpack").setExecutor(new BackpackCommand(this));
         this.getCommand("clearchat").setExecutor(new ClearChatCommand());
         this.getCommand("enderchest").setExecutor(new EnderchestCommand());
         this.getCommand("fly").setExecutor(new FlyCommand(this));
-        this.getCommand("freeze").setExecutor(new FreezeCommand());
+        this.getCommand("freeze").setExecutor(new FreezeCommand(this));
         this.getCommand("gamemode").setExecutor(new GamemodeCommand());
         this.getCommand("heal").setExecutor(new HealCommand());
-        this.getCommand("inventory").setExecutor(new InventoryCommand());
         this.getCommand("ip").setExecutor(new IpCommand());
-        this.getCommand("kick").setExecutor(new KickCommand());
-        this.getCommand("kickall").setExecutor(new KickallCommand());
         this.getCommand("ping").setExecutor(new PingCommand());
-        this.getCommand("shutdown").setExecutor(new ShutdownCommand());
+        this.getCommand("see").setExecutor(new SeeCommand(this));
+        this.getCommand("timer").setExecutor(new TimerCommand());
         this.getCommand("top").setExecutor(new TopCommand());
         this.getCommand("vanish").setExecutor(new VanishCommand(this));
-        this.getCommand("weather").setExecutor(new WeatherCommand());
-        this.getCommand("timer").setExecutor(new TimerCommand());
         // Listeners
-        pluginManager.registerEvents(new ChatListener(), this);
-        pluginManager.registerEvents(new ConnectionListener(), this);
-        pluginManager.registerEvents(new DeathListener(), this);
-        pluginManager.registerEvents(new FreezeListener(), this);
-        pluginManager.registerEvents(new VanishListener(this), this);
+        pluginManager.registerEvents(new ChatListener(this), this);
+        pluginManager.registerEvents(new ConnectionListener(this), this);
+        pluginManager.registerEvents(new DeathListener(this), this);
+        pluginManager.registerEvents(new FreezeListener(this), this);
     }
 
-    public static void noPlayer(CommandSender sender) {
-        sender.sendMessage(ERROR + "You have to be a player.");
-    }
-    public static void noPermission(CommandSender sender) {
-        sender.sendMessage(ERROR + "You are not allowed to do this.");
-    }
-    public static void notPossible(CommandSender sender) {
-        sender.sendMessage(ERROR + "this is currently not possible.");
-    }
-    public static void wrongGamemode(CommandSender sender, GameMode gameMode) {
-        sender.sendMessage(ERROR + "You have to be in " + gameMode + " mode");
-    }
-    public static void wrongTargetGamemode(CommandSender sender, String target, GameMode gameMode) {
-        sender.sendMessage(ERROR + target + " has to be in " + gameMode + " mode");
+    public String wrongGamemode(GameMode gameMode) {
+        return ERROR + "You have to be in " + gameMode + " mode";
     }
 
-    public static Main getInstance() {return instance;}
-    public Config getConfiguration() {return config;}
-    public BackpackManager getBackpackManager() {return backpackManager;}
-    public Timer getTimer() {return timer;}
-    public HashMap<Player, Location> getFrozenPlayers() {return frozenPlayers;}
+    public String wrongTargetGamemode(String target, GameMode gameMode) {
+        return ERROR + target + " has to be in " + gameMode + " mode";
+    }
+
+    public static Main getInstance() {
+        return instance;
+    }
+
+    public Config getConfiguration() {
+        return config;
+    }
+
+    public BackpackManager getBackpackManager() {
+        return backpackManager;
+    }
+
+    public Timer getTimer() {
+        return timer;
+    }
+
+    public HashMap<Player, Location> getFrozenPlayers() {
+        return frozenPlayers;
+    }
 }

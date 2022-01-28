@@ -1,72 +1,43 @@
 package de.tobiaswild.newplugin.commands;
 
-import de.tobiaswild.newplugin.Main;
-import de.tobiaswild.newplugin.utils.backpack.Backpack;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.List;
+import de.tobiaswild.newplugin.Main;
+import de.tobiaswild.newplugin.utils.Backpack;
 
 public class BackpackCommand implements CommandExecutor, TabCompleter {
+
+    private Main plugin;
+
+    public BackpackCommand(Main plugin) {
+        this.plugin = plugin;
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if(!(sender instanceof Player player)) {
-            Main.noPlayer(sender);
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage(Main.NO_PLAYER);
             return false;
         }
         if (!player.hasPermission(Main.PERMISSION + "backpack")) {
-            Main.noPermission(player);
+            player.sendMessage(Main.NO_PERMISSION);
             return false;
         }
-        if (args.length == 0) {
-            Backpack backpack = Main.getInstance().getBackpackManager().getBackpack(player.getUniqueId());
-            player.openInventory(backpack.getInventory());
-            player.sendMessage(Main.SUCCESS + "Opened your Backpack");
-            return true;
-        }
-        if (args.length == 1) {
-            if (!player.hasPermission("backpack.command.other")) {
-                Main.noPermission(player);
-                return false;
-            }
-            Player target = Bukkit.getOfflinePlayer(args[0]).getPlayer();
-            if (target != null) {
-                Backpack backpack = Main.getInstance().getBackpackManager().getBackpack(target.getUniqueId());
-                player.openInventory(backpack.getInventory());
-                player.sendMessage(Main.SUCCESS + "Opened " + target + "'s backpack");
-                return true;
-            }
-            player.sendMessage(Main.ERROR + "The player " + args[0] + " is not online");
-            return false;
-        }
-        player.sendMessage(Main.INFO + "Usage: /backpack [<player>]");
-        return false;
+        Backpack backpack = plugin.getBackpackManager().getBackpack(player.getUniqueId());
+        player.openInventory(backpack.getInventory());
+        player.sendMessage(Main.SUCCESS + "Opened your Backpack");
+        return true;
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String s, String[] args) {
-        ArrayList<String> list = new ArrayList<>();
-        if (args.length == 0) {
-            return list;
-        }
-        if (args.length == 1) {
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                list.add(player.getName());
-            }
-        }
-        ArrayList<String> comList = new ArrayList<>();
-        String current = args[args.length-1].toLowerCase();
-        for (String s1 : list) {
-            if (s1.contains(current)) {
-                comList.add(s1);
-            }
-        }
-        return comList;
+        return new ArrayList<>();
     }
 }

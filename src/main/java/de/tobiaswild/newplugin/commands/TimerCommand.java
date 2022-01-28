@@ -1,23 +1,24 @@
 package de.tobiaswild.newplugin.commands;
 
-import de.tobiaswild.newplugin.utils.timer.Timer;
-import de.tobiaswild.newplugin.Main;
-import org.bukkit.ChatColor;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 
-import java.util.ArrayList;
-import java.util.List;
+import de.tobiaswild.newplugin.Main;
+import de.tobiaswild.newplugin.utils.Timer;
 
 public class TimerCommand implements CommandExecutor, TabCompleter {
+    private Timer timer = Main.getInstance().getTimer();
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
-        Timer timer = Main.getInstance().getTimer();
-
         if (!sender.hasPermission(Main.PERMISSION + "timer")) {
-            Main.noPermission(sender);
+            sender.sendMessage(Main.NO_PERMISSION);
             return false;
         }
         if (args.length == 0) {
@@ -32,10 +33,10 @@ public class TimerCommand implements CommandExecutor, TabCompleter {
                         return false;
                     }
                     timer.setRunning(true);
-                    Main.getInstance().getServer().getConsoleSender().sendMessage(Main.SUCCESS + "timer started");
+                    Bukkit.broadcastMessage(Main.SUCCESS + "timer started");
                     return true;
                 }
-                Main.notPossible(sender);
+                sender.sendMessage(Main.NOT_POSSIBLE);
                 return false;
             }
             case "pause" -> {
@@ -45,10 +46,10 @@ public class TimerCommand implements CommandExecutor, TabCompleter {
                         return false;
                     }
                     timer.setRunning(false);
-                    Main.getInstance().getServer().getConsoleSender().sendMessage(Main.SUCCESS + "timer stopped");
+                    Bukkit.broadcastMessage(Main.SUCCESS + "timer stopped");
                     return true;
                 }
-                Main.notPossible(sender);
+                sender.sendMessage(Main.NOT_POSSIBLE);
                 return false;
             }
             case "set" -> {
@@ -66,7 +67,7 @@ public class TimerCommand implements CommandExecutor, TabCompleter {
                     }
                     break;
                 }
-                Main.notPossible(sender);
+                sender.sendMessage(Main.NOT_POSSIBLE);
                 return false;
             }
             case "reset" -> {
@@ -76,13 +77,13 @@ public class TimerCommand implements CommandExecutor, TabCompleter {
                     sender.sendMessage(Main.SUCCESS + "timer reset");
                     return true;
                 }
-                Main.notPossible(sender);
+                sender.sendMessage(Main.NOT_POSSIBLE);
                 return false;
             }
             case "show" -> {
                 if (timer.isHidden()) {
                     timer.setHidden(false);
-                    Main.getInstance().getServer().getConsoleSender().sendMessage(Main.SUCCESS + "shown");
+                    sender.sendMessage(Main.SUCCESS + "timer now shown");
                     return true;
                 } else {
                     sender.sendMessage(Main.ERROR + "timer already shown");
@@ -92,7 +93,7 @@ public class TimerCommand implements CommandExecutor, TabCompleter {
             case "hide" -> {
                 if (!timer.isHidden()) {
                     timer.setHidden(true);
-                    Main.getInstance().getServer().getConsoleSender().sendMessage(Main.SUCCESS + "hidden");
+                    sender.sendMessage(Main.SUCCESS + "timer now hidden");
                     return true;
                 } else {
                     sender.sendMessage(Main.ERROR + "timer already hidden");
@@ -110,7 +111,6 @@ public class TimerCommand implements CommandExecutor, TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String s, String[] args) {
         ArrayList<String> list = new ArrayList<>();
-        Timer timer = Main.getInstance().getTimer();
         if (args.length == 0) {
             return list;
         }
@@ -130,7 +130,7 @@ public class TimerCommand implements CommandExecutor, TabCompleter {
             }
         }
         ArrayList<String> comList = new ArrayList<>();
-        String current = args[args.length-1].toLowerCase();
+        String current = args[args.length - 1].toLowerCase();
         for (String s1 : list) {
             if (s1.startsWith(current)) {
                 comList.add(s1);
@@ -140,15 +140,6 @@ public class TimerCommand implements CommandExecutor, TabCompleter {
     }
 
     public static void sendUsage(CommandSender sender) {
-        sender.sendMessage("""
-                Usage:
-                /timer resume
-                /timer pause
-                /timer set <time>
-                /timer reset
-                /timer show
-                /timer hide"""
-        );
+        sender.sendMessage("Usage: /timer resume, pause, set <time>, reset, show, hide");
     }
-
 }

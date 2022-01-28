@@ -1,9 +1,9 @@
 package de.tobiaswild.newplugin.commands;
 
-import de.tobiaswild.newplugin.Main;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -11,8 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.List;
+import de.tobiaswild.newplugin.Main;
 
 public class FlyCommand implements CommandExecutor, TabCompleter {
 
@@ -24,17 +23,17 @@ public class FlyCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if(!(sender instanceof Player player)) {
-            Main.noPlayer(sender);
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage(Main.NO_PLAYER);
             return false;
         }
         if (!player.hasPermission(Main.PERMISSION + "fly")) {
-            Main.noPermission(player);
+            player.sendMessage(Main.NO_PERMISSION);
             return false;
         }
         if (args.length == 0) {
-            if(player.getGameMode() != GameMode.SURVIVAL) {
-                Main.wrongGamemode(player, GameMode.SURVIVAL);
+            if (player.getGameMode() != GameMode.SURVIVAL) {
+                player.sendMessage(plugin.wrongGamemode(GameMode.SURVIVAL));
                 return false;
             }
             if (player.getAllowFlight()) {
@@ -48,20 +47,20 @@ public class FlyCommand implements CommandExecutor, TabCompleter {
         }
         if (args.length == 1) {
             if (!sender.hasPermission(Main.PERMISSION + "fly.other")) {
-                Main.noPermission(sender);
+                sender.sendMessage(Main.NO_PERMISSION);
                 return false;
             }
             Player target = Bukkit.getPlayer(args[0]);
             if (target == null) {
-                sender.sendMessage(Main.ERROR + "The player " + target.getDisplayName() + " is offline");
+                sender.sendMessage(Main.ERROR + "The player " + args[0] + " is offline");
                 return false;
             }
             if (target.getName().equals(sender.getName())) {
                 player.sendMessage(Main.ERROR + "Just use /fly if you want to fly");
                 return false;
             }
-            if(target.getGameMode() != GameMode.SURVIVAL) {
-                Main.wrongTargetGamemode(sender, args[0], GameMode.SURVIVAL);
+            if (target.getGameMode() != GameMode.SURVIVAL) {
+                sender.sendMessage(plugin.wrongTargetGamemode(args[0], GameMode.SURVIVAL));
                 return false;
             }
             if (target.getAllowFlight()) {
@@ -85,15 +84,15 @@ public class FlyCommand implements CommandExecutor, TabCompleter {
         if (args.length == 0) {
             return list;
         }
-        if (sender.hasPermission(Main.PERMISSION + "fly.other")) {
-            if (args.length == 1) {
+        if (args.length == 1) {
+            if (sender.hasPermission(Main.PERMISSION + "fly.other")) {
                 for (Player player : Bukkit.getOnlinePlayers()) {
-                    list.add(player.getName());
+                    list.add(player.getDisplayName());
                 }
             }
         }
         ArrayList<String> comList = new ArrayList<>();
-        String current = args[args.length-1].toLowerCase();
+        String current = args[args.length - 1].toLowerCase();
         for (String s1 : list) {
             if (s1.startsWith(current)) {
                 comList.add(s1);

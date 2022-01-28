@@ -5,48 +5,48 @@ api-version: 1.18
 authors: [tobiaswild]
 website: https.//github.com/tobiaswild/
 commands:
-  backpack:
-    aliases:
-      - bp
-      - rucksack
-    description: open the backpack
-  timer:
-    description: controll the timer
-  clearchat:
-    description: Lösche den Chat
-    aliases:
-      - cc
-  enderchest:
-    description: Siehe dir eine Enderchest an
-    aliases:
-      - ec
-  fly:
-    description: Lässt dich im Survival Mode fliegen
-  freeze:
-    description: Lässt dich Spieler einfrieren
-  gamemode:
-    description: Ändere deinen Spielmodus
-    aliases:
-      - gm
-  heal:
-    description: Heile dich oder eine anderen Spieler
-  inventory:
-    description: Siehe dir ein Inventar an
-    aliases:
-      - inv
-  ip:
-    description: Zeigt dir deine IP-Adresse
-  kick:
-    description: Kicke einen Spieler
-  kickall:
-    description: Kicke alle Spieler
-  ping:
-    description: Zeigt dir deine Ping
-  shutdown:
-    description: Fährt den Server herunter
-  top:
-    description: Teleportiere dich an die Oberfläche
-  vanish:
-    description: Versteckt dich vor anderen Spielern
-  weather:
-    description: Wetter
+    backpack:
+        aliases:
+            - bp
+            - rucksack
+        description: open the backpack
+    timer:
+        description: controll the timer
+    clearchat:
+        description: Lösche den Chat
+        aliases:
+            - cc
+    enderchest:
+        description: Siehe dir eine Enderchest an
+        aliases:
+            - ec
+    fly:
+        description: Lässt dich im Survival Mode fliegen
+    freeze:
+        description: Lässt dich Spieler einfrieren
+    gamemode:
+        description: Ändere deinen Spielmodus
+        aliases:
+            - gm
+    heal:
+        description: Heile dich oder eine anderen Spieler
+    ip:
+        description: Zeigt dir deine IP-Adresse
+    kick:
+        description: Kicke einen Spieler
+    kickall:
+        description: Kicke alle Spieler
+    ping:
+        description: Zeigt dir deine Ping
+    shutdown:
+        description: Fährt den Server herunter
+    top:
+        description: Teleportiere dich an die Oberfläche
+    vanish:
+        aliases:
+            - v
+        description: Versteckt dich vor anderen Spielern
+    weather:
+        description: Wetter
+    see:
+        description: see everything

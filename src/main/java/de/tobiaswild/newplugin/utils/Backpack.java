@@ -1,13 +1,12 @@
-package de.tobiaswild.newplugin.utils.backpack;
-
-import de.tobiaswild.newplugin.utils.Base64;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.inventory.Inventory;
+package de.tobiaswild.newplugin.utils;
 
 import java.io.IOException;
-import java.util.Objects;
 import java.util.UUID;
+
+import org.bukkit.Bukkit;
+import org.bukkit.inventory.Inventory;
+
+import de.tobiaswild.newplugin.utils.Base64;
 
 public class Backpack {
 

@@ -1,8 +1,9 @@
 package de.tobiaswild.newplugin.commands;
 
-import de.tobiaswild.newplugin.Main;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -10,47 +11,46 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.List;
+import de.tobiaswild.newplugin.Main;
 
 public class GamemodeCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         if (!sender.hasPermission(Main.PERMISSION + "gamemode")) {
-            Main.noPermission(sender);
+            sender.sendMessage(Main.NO_PERMISSION);
             return false;
         }
         if (args.length >= 1) {
-            GameMode gm;
+            GameMode gamemode;
             switch (args[0]) {
-                case "0", "survival", "Survival", "SURVIVAL" -> gm = GameMode.SURVIVAL;
-                case "1", "creative", "Creative", "CREATIVE" -> gm = GameMode.CREATIVE;
-                case "2", "adventure", "Adventure", "ADVENTURE" -> gm = GameMode.ADVENTURE;
-                case "3", "spectator", "Spectator", "SPECTATOR" -> gm = GameMode.SPECTATOR;
+                case "0", "survival", "Survival", "SURVIVAL" -> gamemode = GameMode.SURVIVAL;
+                case "1", "creative", "Creative", "CREATIVE" -> gamemode = GameMode.CREATIVE;
+                case "2", "adventure", "Adventure", "ADVENTURE" -> gamemode = GameMode.ADVENTURE;
+                case "3", "spectator", "Spectator", "SPECTATOR" -> gamemode = GameMode.SPECTATOR;
                 default -> {
-                    sender.sendMessage(ChatColor.RED + "Gib bitte eine gültigen Spielmodus an");
+                    sender.sendMessage(Main.ERROR + "Please enter a valid gamemode");
                     return false;
                 }
             }
             if (args.length == 1) {
-                if(!(sender instanceof Player player)) {
-                    Main.noPlayer(sender);
+                if (!(sender instanceof Player player)) {
+                    sender.sendMessage(Main.NO_PLAYER);
                     return false;
                 }
-                player.setGameMode(gm);
-                player.sendMessage(ChatColor.GREEN + "Neuer Spielmodus: " + player.getGameMode());
+                player.setGameMode(gamemode);
+                player.sendMessage(Main.SUCCESS + "Neuer Spielmodus: " + player.getGameMode());
                 return true;
             }
             if (args.length == 2) {
-                Player target = Bukkit.getOfflinePlayer(args[1]).getPlayer();
+                Player target = Bukkit.getPlayer(args[1]);
                 if (target != null) {
-                    target.setGameMode(gm);
-                    target.sendMessage(ChatColor.GREEN + "Neuer Spielmodus: " + target.getGameMode());
-                    sender.sendMessage(ChatColor.GREEN + "Neuer Spielmodus von "  + target.getName() + ": " + target.getGameMode());
+                    target.setGameMode(gamemode);
+                    target.sendMessage(Main.SUCCESS + "Neuer Spielmodus: " + target.getGameMode());
+                    sender.sendMessage(Main.SUCCESS + "Neuer Spielmodus von " + target.getDisplayName() + ": "
+                            + target.getGameMode());
                     return true;
                 }
-            }
-            else {
+            } else {
                 sendUsage(sender);
             }
         }
@@ -72,11 +72,11 @@ public class GamemodeCommand implements CommandExecutor, TabCompleter {
         }
         if (args.length == 2) {
             for (Player player : Bukkit.getOnlinePlayers()) {
-                list.add(player.getName());
+                list.add(player.getDisplayName());
             }
         }
         ArrayList<String> comList = new ArrayList<>();
-        String current = args[args.length-1].toLowerCase();
+        String current = args[args.length - 1].toLowerCase();
         for (String s1 : list) {
             if (s1.contains(current)) {
                 comList.add(s1);
@@ -86,6 +86,6 @@ public class GamemodeCommand implements CommandExecutor, TabCompleter {
     }
 
     public void sendUsage(CommandSender sender) {
-        sender.sendMessage(ChatColor.BLUE + "Usage: /gamemode <gamemode> [<player>]");
+        sender.sendMessage(Main.INFO + "Usage: /gamemode <gamemode> [<player>]");
     }
 }
