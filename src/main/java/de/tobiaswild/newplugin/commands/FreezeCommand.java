@@ -38,17 +38,12 @@ public class FreezeCommand implements CommandExecutor, TabCompleter {
                     target.playSound(target.getLocation(), Sound.BLOCK_IRON_DOOR_OPEN, 1, 1);
                     target.sendMessage(Main.SUCCESS + "You are now free");
                 } else {
-                    if (!target.isOnGround()) {
-                        int x = (int) target.getLocation().getX();
-                        int z = (int) target.getLocation().getZ();
-                        int y = Objects.requireNonNull(Bukkit.getWorld(target.getWorld().getName()))
-                                .getHighestBlockYAt(x, z);
-                        target.teleport(new Location(Bukkit.getWorld("world"), x, y + 2, z));
-                        if (target.isFlying()) {
-                            target.setFlying(false);
-                        }
-                        target.playSound(target.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
-                        target.sendMessage(Main.ERROR + "You were teleported to ground");
+                    int x = (int) target.getLocation().getX();
+                    int z = (int) target.getLocation().getZ();
+                    int y = Objects.requireNonNull(Bukkit.getWorld(target.getWorld().getName())).getHighestBlockYAt(x, z);
+                    target.teleport(new Location(Bukkit.getWorld("world"), x, y + 2, z));
+                    if (target.isFlying()) {
+                        target.setFlying(false);
                     }
                     plugin.getFrozenPlayers().put(target, target.getLocation().clone());
                     target.playSound(target.getLocation(), Sound.BLOCK_IRON_DOOR_CLOSE, 1, 1);

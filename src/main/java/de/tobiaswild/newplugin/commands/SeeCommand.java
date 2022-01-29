@@ -35,22 +35,26 @@ public class SeeCommand implements CommandExecutor, TabCompleter {
             Player target = Bukkit.getPlayer(args[1]);
             if (target != null) {
                 switch (args[0]) {
-                    case "backpack", "bp":
+                    case "backpack", "bp" -> {
                         Backpack backpack = plugin.getBackpackManager().getBackpack(target.getUniqueId());
                         player.openInventory(backpack.getInventory());
-                        player.sendMessage(Main.SUCCESS + "Opened" + target.getDisplayName() + "'s Backpack");
+                        player.sendMessage(Main.SUCCESS + "Opened " + target.getDisplayName() + "'s Backpack");
                         return true;
-                    case "enderchest", "ec":
+                    }
+                    case "enderchest", "ec" -> {
                         player.openInventory(target.getEnderChest());
-                        player.sendMessage(Main.SUCCESS + "Opened" + target.getDisplayName() + "'s EnderChest");
+                        player.sendMessage(Main.SUCCESS + "Opened " + target.getDisplayName() + "'s EnderChest");
                         return true;
-                    case "inventory", "inv":
+                    }
+                    case "inventory", "inv" -> {
                         player.openInventory(target.getInventory());
-                        player.sendMessage(Main.SUCCESS + "Opened" + target.getDisplayName() + "'s Inventory");
+                        player.sendMessage(Main.SUCCESS + "Opened " + target.getDisplayName() + "'s Inventory");
                         return true;
-                    default:
-                        player.sendMessage(Main.ERROR + "ERROR");
-                        break;
+                    }
+                    default -> player.sendMessage(Main.ERROR + """
+                            Please enter a valid type of inventory you want to see.
+                            backpack, enderchest or inventory
+                            """);
                 }
             }
         }

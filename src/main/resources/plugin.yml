@@ -10,8 +10,6 @@ commands:
             - bp
             - rucksack
         description: open the backpack
-    timer:
-        description: controll the timer
     clearchat:
         description: Lösche den Chat
         aliases:
@@ -32,21 +30,19 @@ commands:
         description: Heile dich oder eine anderen Spieler
     ip:
         description: Zeigt dir deine IP-Adresse
-    kick:
-        description: Kicke einen Spieler
-    kickall:
-        description: Kicke alle Spieler
     ping:
         description: Zeigt dir deine Ping
-    shutdown:
-        description: Fährt den Server herunter
+    position:
+        aliases:
+            - pos
+        description: pos
+    timer:
+        description: controll the timer
     top:
         description: Teleportiere dich an die Oberfläche
     vanish:
         aliases:
             - v
         description: Versteckt dich vor anderen Spielern
-    weather:
-        description: Wetter
     see:
         description: see everything

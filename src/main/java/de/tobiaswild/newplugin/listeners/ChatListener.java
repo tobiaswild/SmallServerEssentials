@@ -11,6 +11,9 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 import de.tobiaswild.newplugin.Main;
 
+import java.util.Objects;
+import java.util.Optional;
+
 public class ChatListener implements Listener {
 
     private Main plugin;
@@ -22,18 +25,19 @@ public class ChatListener implements Listener {
 
     @EventHandler
     public void onAsyncPlayerChat(AsyncPlayerChatEvent event) {
-        event.setFormat(event.getPlayer().getDisplayName() + ": " + event.getMessage());
-        if (event.getMessage().startsWith("7")) {
+        Player player = event.getPlayer();
+        String message = event.getMessage();
+        event.setFormat(player.getDisplayName() + ": " + event.getMessage());
+        if (message.startsWith("7")) {
             event.setCancelled(true);
-            event.getPlayer()
-                    .sendMessage(Main.INFO + "Did you mean \"" + event.getMessage().replace("7", "/") + "\" ?");
+            player.sendMessage(Main.INFO + "Did you mean \"" + message.replace("7", "/") + "\" ?");
             return;
         }
         if (config.getBoolean("vanish." + event.getPlayer().getUniqueId())) {
             event.setCancelled(true);
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                if (player.hasPermission(Main.PERMISSION + "vanish.chat")) {
-                    player.sendMessage(ChatColor.BLUE + "[Vanished] " + ChatColor.RESET
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (p.hasPermission(Main.PERMISSION + "vanish.chat")) {
+                    p.sendMessage(ChatColor.BLUE + "[Vanished] " + ChatColor.RESET
                             + event.getPlayer().getDisplayName() + ": " + event.getMessage());
                 }
             }
@@ -42,24 +46,10 @@ public class ChatListener implements Listener {
 
     @EventHandler
     public void onPlayerCommandSend(PlayerCommandPreprocessEvent event) {
-        if (event.getMessage().contains("/deop")) {
-            String msg = event.getMessage().replace("/deop ", "");
-            if (Bukkit.getPlayer(msg) != null) {
-                Player player = Bukkit.getPlayer(msg);
-                for (Player p : Bukkit.getOnlinePlayers()) {
-                    if (config.getBoolean("vanish." + p.getUniqueId())) {
-                        player.hidePlayer(plugin, p);
-                    }
-                }
-            }
-        }
-        if (event.getMessage().contains("/op")) {
-            String msg = event.getMessage().replace("/op ", "");
-            if (Bukkit.getPlayer(msg) != null) {
-                Player player = Bukkit.getPlayer(msg);
-                for (Player p : Bukkit.getOnlinePlayers()) {
-                    player.showPlayer(plugin, p);
-                }
+        if (event.getMessage().startsWith("/deop")) {
+            String player = event.getMessage().replace("/deop ", "");
+            if (Bukkit.getPlayer(player) != null) {
+                Objects.requireNonNull(Bukkit.getPlayer(player)).kickPlayer(Main.ERROR + "You got deopoed.");
             }
         }
     }
