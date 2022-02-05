@@ -25,13 +25,10 @@ public class PositionManager {
 
     public void setPosition(String name, Location location) {
         map.put(name, location);
-        save();
     }
 
     public void deletePosition(String name) {
         map.remove(name);
-        config.set("position." + name, null);
-        save();
     }
 
     private void load() {

@@ -82,7 +82,7 @@ public final class Main extends JavaPlugin {
         this.getCommand("clearchat").setExecutor(new ClearChatCommand());
         this.getCommand("enderchest").setExecutor(new EnderchestCommand());
         this.getCommand("fly").setExecutor(new FlyCommand(this));
-        this.getCommand("freeze").setExecutor(new FreezeCommand(this));
+        this.getCommand("freeze").setExecutor(new FreezeCommand());
         this.getCommand("gamemode").setExecutor(new GamemodeCommand());
         this.getCommand("heal").setExecutor(new HealCommand(this));
         this.getCommand("ip").setExecutor(new IpCommand());
@@ -96,7 +96,7 @@ public final class Main extends JavaPlugin {
         pluginManager.registerEvents(new ChatListener(), this);
         pluginManager.registerEvents(new ConnectionListener(this), this);
         pluginManager.registerEvents(new DeathListener(), this);
-        pluginManager.registerEvents(new FreezeListener(this), this);
+        pluginManager.registerEvents(new FreezeListener(), this);
     }
 
     public String wrongGamemode(GameMode gameMode) {

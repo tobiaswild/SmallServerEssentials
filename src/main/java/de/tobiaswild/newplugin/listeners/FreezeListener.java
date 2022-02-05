@@ -9,24 +9,17 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 public class FreezeListener implements Listener {
 
-    private Main plugin;
-    private YamlConfiguration config = Main.getInstance().getConfiguration().getConfig();
-    private FreezeManager freezeManager = Main.getInstance().getFreezeManager();
-
-    public FreezeListener(Main plugin) {
-        this.plugin = plugin;
-    }
+    private final FreezeManager freezeManager = Main.getInstance().getFreezeManager();
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (!config.contains("freeze." + event.getPlayer().getUniqueId())) {
-            event.getPlayer().sendMessage("frozen");
+        if (!freezeManager.getFrozenPlayers().contains(event.getPlayer().getUniqueId())) {
             return;
         }
         if ((int) event.getFrom().getBlockX() != (int) event.getTo().getBlockX() ||
                 (int) event.getFrom().getBlockY() != (int) event.getTo().getBlockY() ||
                 (int) event.getFrom().getBlockZ() != (int) event.getTo().getBlockZ()) {
-            event.getPlayer().teleport(freezeManager.getFreezePosition(event.getPlayer()));
+            event.getPlayer().teleport(freezeManager.getFreezePosition(event.getPlayer().getUniqueId()));
         }
     }
 }

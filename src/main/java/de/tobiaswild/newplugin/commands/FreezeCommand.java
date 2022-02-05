@@ -1,9 +1,7 @@
 package de.tobiaswild.newplugin.commands;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
+import de.tobiaswild.newplugin.Main;
+import de.tobiaswild.newplugin.utils.FreezeManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -11,21 +9,15 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import de.tobiaswild.newplugin.Main;
-import de.tobiaswild.newplugin.utils.FreezeManager;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class FreezeCommand implements CommandExecutor, TabCompleter {
 
     private final FreezeManager freezeManager = Main.getInstance().getFreezeManager();
-    private final YamlConfiguration config = Main.getInstance().getConfiguration().getConfig();
-    private Main plugin;
-
-    public FreezeCommand(Main plugin) {
-        this.plugin = plugin;
-    }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
@@ -37,8 +29,8 @@ public class FreezeCommand implements CommandExecutor, TabCompleter {
             String targetName = args[0];
             Player target = Bukkit.getPlayer(targetName);
             if (target != null) {
-                if (config.contains("freeze." + target.getUniqueId())) {
-                    freezeManager.deleteFreezePosition(target);
+                if (freezeManager.getFrozenPlayers().contains(target.getUniqueId())) {
+                    freezeManager.deleteFreezePosition(target.getUniqueId());
                     target.playSound(target.getLocation(), Sound.BLOCK_IRON_DOOR_OPEN, 1, 1);
                     target.sendMessage(Main.SUCCESS + "You are now free");
                 } else {
@@ -55,7 +47,7 @@ public class FreezeCommand implements CommandExecutor, TabCompleter {
                             (int) target.getLocation().getX(),
                             (int) target.getLocation().getY(),
                             (int) target.getLocation().getZ());
-                    freezeManager.setFreezePosition(target, location);
+                    freezeManager.setFreezePosition(target.getUniqueId(), location);
                     target.playSound(target.getLocation(), Sound.BLOCK_IRON_DOOR_CLOSE, 1, 1);
                     target.sendMessage(Main.ERROR + "You are frozen");
                 }

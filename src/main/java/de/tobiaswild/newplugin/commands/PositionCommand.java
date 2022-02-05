@@ -1,25 +1,22 @@
 package de.tobiaswild.newplugin.commands;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-
+import de.tobiaswild.newplugin.Main;
+import de.tobiaswild.newplugin.utils.PositionManager;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import de.tobiaswild.newplugin.Main;
-import de.tobiaswild.newplugin.utils.PositionManager;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 public class PositionCommand implements CommandExecutor, TabCompleter {
 
-    private YamlConfiguration config = Main.getInstance().getConfiguration().getConfig();
-    private PositionManager positionManager = Main.getInstance().getPositionManager();
+    private final PositionManager positionManager = Main.getInstance().getPositionManager();
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -39,7 +36,7 @@ public class PositionCommand implements CommandExecutor, TabCompleter {
                         return false;
                     }
                     String posName = args[1];
-                    if (config.contains("position." + posName)) {
+                    if (positionManager.getPositions().contains("position." + posName)) {
                         player.sendMessage(Main.ERROR + "Config does already contain a position with this name");
                         return false;
                     }
@@ -58,7 +55,7 @@ public class PositionCommand implements CommandExecutor, TabCompleter {
                         return false;
                     }
                     String posName = args[1];
-                    if (!config.contains("position." + posName)) {
+                    if (!positionManager.getPositions().contains("position." + posName)) {
                         player.sendMessage(Main.ERROR + "Config does not contain a position with this name");
                         return false;
                     }
@@ -72,7 +69,7 @@ public class PositionCommand implements CommandExecutor, TabCompleter {
                         return false;
                     }
                     String posName = args[1];
-                    if (!config.contains("position." + posName)) {
+                    if (!positionManager.getPositions().contains("position." + posName)) {
                         player.sendMessage(Main.ERROR + "Config does not contain a position with this name");
                         return false;
                     }
