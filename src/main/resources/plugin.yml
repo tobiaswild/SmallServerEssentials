@@ -5,29 +5,33 @@ api-version: 1.18
 authors: [tobiaswild]
 website: https.//github.com/tobiaswild/
 commands:
+    back:
+        description: Go back to you death position
     backpack:
         aliases:
             - bp
             - rucksack
         description: open the backpack
+    build:
+        description: switch between survival and creative mode.
     clearchat:
-        description: Lösche den Chat
         aliases:
             - cc
+        description: Lösche den Chat
     enderchest:
-        description: Siehe dir eine Enderchest an
         aliases:
             - ec
+        description: Siehe dir eine Enderchest an
     fly:
-        description: Lässt dich im Survival Mode fliegen
+        description: Go on a big trip with fly
     freeze:
-        description: Lässt dich Spieler einfrieren
+        description: freeze a player
     gamemode:
-        description: Ändere deinen Spielmodus
         aliases:
             - gm
+        description: Ächange your gamemode
     heal:
-        description: Heile dich oder eine anderen Spieler
+        description: Heal a player
     ip:
         description: Zeigt dir deine IP-Adresse
     ping:

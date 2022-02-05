@@ -12,16 +12,10 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import de.tobiaswild.newplugin.Main;
 
 import java.util.Objects;
-import java.util.Optional;
 
 public class ChatListener implements Listener {
 
-    private Main plugin;
     private YamlConfiguration config = Main.getInstance().getConfiguration().getConfig();
-
-    public ChatListener(Main plugin) {
-        this.plugin = plugin;
-    }
 
     @EventHandler
     public void onAsyncPlayerChat(AsyncPlayerChatEvent event) {

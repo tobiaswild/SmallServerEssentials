@@ -1,6 +1,8 @@
 package de.tobiaswild.newplugin.listeners;
 
 import de.tobiaswild.newplugin.Main;
+import de.tobiaswild.newplugin.utils.FreezeManager;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -8,6 +10,8 @@ import org.bukkit.event.player.PlayerMoveEvent;
 public class FreezeListener implements Listener {
 
     private Main plugin;
+    private YamlConfiguration config = Main.getInstance().getConfiguration().getConfig();
+    private FreezeManager freezeManager = Main.getInstance().getFreezeManager();
 
     public FreezeListener(Main plugin) {
         this.plugin = plugin;
@@ -15,13 +19,14 @@ public class FreezeListener implements Listener {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (!plugin.getFrozenPlayers().containsKey(event.getPlayer())) {
+        if (!config.contains("freeze." + event.getPlayer().getUniqueId())) {
+            event.getPlayer().sendMessage("frozen");
             return;
         }
         if ((int) event.getFrom().getBlockX() != (int) event.getTo().getBlockX() ||
                 (int) event.getFrom().getBlockY() != (int) event.getTo().getBlockY() ||
                 (int) event.getFrom().getBlockZ() != (int) event.getTo().getBlockZ()) {
-            event.getPlayer().teleport(plugin.getFrozenPlayers().get(event.getPlayer()));
+            event.getPlayer().teleport(freezeManager.getFreezePosition(event.getPlayer()));
         }
     }
 }
