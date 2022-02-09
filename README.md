@@ -145,3 +145,25 @@ If the contains a word in these [<>] brackets, it means that this input is not b
 After enabling the plugin you can configure it in the `config.yml` located in the `NewPlugin` folder in your plugins directory.
 
 Documentation will follow.
+
+## Other importent stuff
+
+### Inspired and copied from
+
+-   DerBankos [TutorialReloaded Plugin](https://github.com/DerBanko/TutorialReloaded)
+-   GHG on [YouTube](https://www.youtube.com/c/GHG_TUTORIALS)
+-   CoasterFreaks [SimpleLobby Plugin](https://github.com/CoasterFreakDE/SimpleLobby)
+-   CoolePizza on [YouTube](https://github.com/CoasterFreakDE/SimpleLobby)
+-   Many more
+
+### CONTRIBUTING
+
+Read the contributing instructions [here](https://github.com/tobiaswild/NewPlugin/blob/master/CONTRIBUTING.md)
+
+### LICENSE
+
+MIT License.
+
+You can create your own Plugin for free without notifying me by forking this project under the following conditions:
+
+-   Add a link to this project
