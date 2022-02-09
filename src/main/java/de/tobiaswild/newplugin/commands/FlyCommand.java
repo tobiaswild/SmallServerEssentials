@@ -15,7 +15,7 @@ import de.tobiaswild.newplugin.Main;
 
 public class FlyCommand implements CommandExecutor, TabCompleter {
 
-    private Main plugin;
+    private final Main plugin;
 
     public FlyCommand(Main plugin) {
         this.plugin = plugin;
@@ -46,31 +46,31 @@ public class FlyCommand implements CommandExecutor, TabCompleter {
             return true;
         }
         if (args.length == 1) {
-            if (!sender.hasPermission(Main.PERMISSION + "fly.other")) {
-                sender.sendMessage(Main.NO_PERMISSION);
+            if (!player.hasPermission(Main.PERMISSION + "fly.other")) {
+                player.sendMessage(Main.NO_PERMISSION);
                 return false;
             }
             Player target = Bukkit.getPlayer(args[0]);
             if (target == null) {
-                sender.sendMessage(Main.ERROR + "The player " + args[0] + " is offline");
+                player.sendMessage(plugin.playerNotAvailable(args[0]));
                 return false;
             }
-            if (target.getName().equals(sender.getName())) {
+            if (target.getName().equals(player.getName())) {
                 player.sendMessage(Main.ERROR + "Just use /fly if you want to fly");
                 return false;
             }
             if (target.getGameMode() != GameMode.SURVIVAL) {
-                sender.sendMessage(plugin.wrongTargetGamemode(args[0], GameMode.SURVIVAL));
+                player.sendMessage(plugin.wrongTargetGamemode(args[0], GameMode.SURVIVAL));
                 return false;
             }
             if (target.getAllowFlight()) {
                 target.setAllowFlight(false);
-                target.sendMessage(Main.SUCCESS + "Du kannst jetzt nicht mehr fliegen");
-                sender.sendMessage(Main.INFO + target.getDisplayName() + " kann jetzt nicht mehr fliegen");
+                target.sendMessage(Main.INFO + "You cant fly now");
+                player.sendMessage(Main.SUCCESS + target.getDisplayName() + " cant fly anymore");
             } else {
                 target.setAllowFlight(true);
-                target.sendMessage(Main.SUCCESS + "Du kannst jetzt fliegen");
-                sender.sendMessage(Main.INFO + target.getDisplayName() + " kann jetzt fliegen");
+                target.sendMessage(Main.SUCCESS + "You are able to fly");
+                player.sendMessage(Main.INFO + target.getDisplayName() + " is now able to fly");
             }
             return true;
         }

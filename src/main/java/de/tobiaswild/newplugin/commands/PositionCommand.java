@@ -36,7 +36,7 @@ public class PositionCommand implements CommandExecutor, TabCompleter {
                         return false;
                     }
                     String posName = args[1];
-                    if (positionManager.getPositions().contains("position." + posName)) {
+                    if (positionManager.getPositions().contains(posName)) {
                         player.sendMessage(Main.ERROR + "Config does already contain a position with this name");
                         return false;
                     }
@@ -55,7 +55,7 @@ public class PositionCommand implements CommandExecutor, TabCompleter {
                         return false;
                     }
                     String posName = args[1];
-                    if (!positionManager.getPositions().contains("position." + posName)) {
+                    if (!positionManager.getPositions().contains(posName)) {
                         player.sendMessage(Main.ERROR + "Config does not contain a position with this name");
                         return false;
                     }
@@ -69,7 +69,7 @@ public class PositionCommand implements CommandExecutor, TabCompleter {
                         return false;
                     }
                     String posName = args[1];
-                    if (!positionManager.getPositions().contains("position." + posName)) {
+                    if (!positionManager.getPositions().contains(posName)) {
                         player.sendMessage(Main.ERROR + "Config does not contain a position with this name");
                         return false;
                     }

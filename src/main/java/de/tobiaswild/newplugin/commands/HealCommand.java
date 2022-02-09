@@ -15,7 +15,7 @@ import de.tobiaswild.newplugin.Main;
 
 public class HealCommand implements CommandExecutor, TabCompleter {
 
-    private Main plugin;
+    private final Main plugin;
 
     public HealCommand(Main plugin) {
         this.plugin = plugin;
@@ -50,7 +50,7 @@ public class HealCommand implements CommandExecutor, TabCompleter {
             }
             Player target = Bukkit.getPlayer(args[0]);
             if (target == null) {
-                player.sendMessage(Main.ERROR + "The player " + args[0] + " is offline");
+                player.sendMessage(plugin.playerNotAvailable(args[0]));
                 return false;
             }
             if (target.getName().equals(player.getName())) {

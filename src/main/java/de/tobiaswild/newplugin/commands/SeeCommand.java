@@ -3,6 +3,8 @@ package de.tobiaswild.newplugin.commands;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.tobiaswild.newplugin.utils.BackpackManager;
+import de.tobiaswild.newplugin.utils.FreezeManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -15,7 +17,8 @@ import de.tobiaswild.newplugin.utils.Backpack;
 
 public class SeeCommand implements CommandExecutor, TabCompleter {
 
-    private Main plugin;
+    private final Main plugin;
+    private final BackpackManager backpackManager = Main.getInstance().getBackpackManager();
 
     public SeeCommand(Main plugin) {
         this.plugin = plugin;
@@ -33,32 +36,31 @@ public class SeeCommand implements CommandExecutor, TabCompleter {
         }
         if (args.length == 2) {
             Player target = Bukkit.getPlayer(args[1]);
-            if (target != null) {
-                switch (args[0]) {
-                    case "backpack", "bp" -> {
-                        Backpack backpack = plugin.getBackpackManager().getBackpack(target.getUniqueId());
-                        player.openInventory(backpack.getInventory());
-                        player.sendMessage(Main.SUCCESS + "Opened " + target.getDisplayName() + "'s Backpack");
-                        return true;
-                    }
-                    case "enderchest", "ec" -> {
-                        player.openInventory(target.getEnderChest());
-                        player.sendMessage(Main.SUCCESS + "Opened " + target.getDisplayName() + "'s EnderChest");
-                        return true;
-                    }
-                    case "inventory", "inv" -> {
-                        player.openInventory(target.getInventory());
-                        player.sendMessage(Main.SUCCESS + "Opened " + target.getDisplayName() + "'s Inventory");
-                        return true;
-                    }
-                    default -> player.sendMessage(Main.ERROR + """
-                            Please enter a valid type of inventory you want to see.
-                            backpack, enderchest or inventory
-                            """);
+            if (target == null) {
+                player.sendMessage(plugin.playerNotAvailable(args[0]));
+                return false;
+            }
+            switch (args[0]) {
+                case "backpack", "bp" -> {
+                    Backpack backpack = backpackManager.getBackpack(target.getUniqueId());
+                    player.openInventory(backpack.getInventory());
+                    player.sendMessage(Main.SUCCESS + "Opened " + target.getDisplayName() + "'s Backpack");
+                    return true;
                 }
+                case "enderchest", "ec" -> {
+                    player.openInventory(target.getEnderChest());
+                    player.sendMessage(Main.SUCCESS + "Opened " + target.getDisplayName() + "'s EnderChest");
+                    return true;
+                }
+                case "inventory", "inv" -> {
+                    player.openInventory(target.getInventory());
+                    player.sendMessage(Main.SUCCESS + "Opened " + target.getDisplayName() + "'s Inventory");
+                    return true;
+                }
+                default -> sendUsage(player);
             }
         }
-        player.sendMessage(Main.INFO + "Usage: /see [backpack/enderchest/inventory] [<player>]");
+        sendUsage(player);
         return false;
     }
 
@@ -87,4 +89,9 @@ public class SeeCommand implements CommandExecutor, TabCompleter {
         }
         return comList;
     }
+
+    public void sendUsage(CommandSender sender) {
+        sender.sendMessage(Main.INFO + "Usage: /see [backpack/enderchest/inventory] [<player>]");
+    }
+
 }

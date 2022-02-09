@@ -13,7 +13,8 @@ import de.tobiaswild.newplugin.Main;
 import de.tobiaswild.newplugin.utils.Timer;
 
 public class TimerCommand implements CommandExecutor, TabCompleter {
-    private Timer timer = Main.getInstance().getTimer();
+
+    private final Timer timer = Main.getInstance().getTimer();
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
@@ -26,7 +27,7 @@ public class TimerCommand implements CommandExecutor, TabCompleter {
             return false;
         }
         switch (args[0].toLowerCase()) {
-            case "resume" -> {
+            case "resume", "start" -> {
                 if (!timer.isHidden()) {
                     if (timer.isRunning()) {
                         sender.sendMessage(Main.ERROR + "timer already running");
@@ -39,7 +40,7 @@ public class TimerCommand implements CommandExecutor, TabCompleter {
                 sender.sendMessage(Main.NOT_POSSIBLE);
                 return false;
             }
-            case "pause" -> {
+            case "pause", "stop" -> {
                 if (!timer.isHidden()) {
                     if (!timer.isRunning()) {
                         sender.sendMessage(Main.ERROR + "timer already stopped");
@@ -63,7 +64,7 @@ public class TimerCommand implements CommandExecutor, TabCompleter {
                         timer.setTime(Integer.parseInt(args[1]));
                         sender.sendMessage(Main.SUCCESS + "timer set to " + args[1]);
                     } catch (NumberFormatException e) {
-                        sender.sendMessage(Main.ERROR + "second parameter has to be a int!");
+                        sender.sendMessage(Main.ERROR + "second parameter has to be a int");
                     }
                     break;
                 }
@@ -105,6 +106,7 @@ public class TimerCommand implements CommandExecutor, TabCompleter {
                 return false;
             }
         }
+        sendUsage(sender);
         return false;
     }
 
@@ -120,10 +122,10 @@ public class TimerCommand implements CommandExecutor, TabCompleter {
             } else {
                 list.add("hide");
                 if (timer.isRunning()) {
-                    list.add("pause");
+                    list.add("stop");
                     list.remove("hide");
                 } else {
-                    list.add("resume");
+                    list.add("start");
                     list.add("set");
                     list.add("reset");
                 }

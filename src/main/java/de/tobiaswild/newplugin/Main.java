@@ -1,8 +1,10 @@
 package de.tobiaswild.newplugin;
 
+import de.tobiaswild.newplugin.utils.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -26,29 +28,25 @@ import de.tobiaswild.newplugin.listeners.ChatListener;
 import de.tobiaswild.newplugin.listeners.ConnectionListener;
 import de.tobiaswild.newplugin.listeners.DeathListener;
 import de.tobiaswild.newplugin.listeners.FreezeListener;
-import de.tobiaswild.newplugin.utils.BackpackManager;
-import de.tobiaswild.newplugin.utils.Config;
-import de.tobiaswild.newplugin.utils.FreezeManager;
-import de.tobiaswild.newplugin.utils.PositionManager;
-import de.tobiaswild.newplugin.utils.Timer;
 
 public final class Main extends JavaPlugin {
 
     private static Main instance;
     private Config config;
     private BackpackManager backpackManager;
+    private DeathManager deathManager;
     private FreezeManager freezeManager;
     private PositionManager positionManager;
+    private VanishManager vanishManager;
     private Timer timer;
-    // TODO: FreezeManager
 
     public static final String PERMISSION = "newplugin.",
             ERROR = ChatColor.RED.toString() + ChatColor.BOLD + "! " + ChatColor.RESET,
             INFO = ChatColor.YELLOW.toString() + "ℹ " + ChatColor.RESET,
             SUCCESS = ChatColor.GREEN.toString() + "✌ " + ChatColor.RESET,
-            NO_PLAYER = ERROR + "You have to be a player.",
-            NO_PERMISSION = ERROR + "You are not allowed to do this.",
-            NOT_POSSIBLE = ERROR + "This is currently not possible.";
+            NO_PLAYER = ERROR + "You have to be a player to do this",
+            NO_PERMISSION = ERROR + "You do not have the permission to do this",
+            NOT_POSSIBLE = ERROR + "You are currently not able to do this";
 
     @Override
     public void onLoad() {
@@ -59,8 +57,10 @@ public final class Main extends JavaPlugin {
     @Override
     public void onEnable() {
         backpackManager = new BackpackManager();
+        deathManager = new DeathManager();
         freezeManager = new FreezeManager();
         positionManager = new PositionManager();
+        vanishManager = new VanishManager();
         timer = new Timer();
         init(Bukkit.getPluginManager());
     }
@@ -68,8 +68,10 @@ public final class Main extends JavaPlugin {
     @Override
     public void onDisable() {
         backpackManager.save();
+        deathManager.save();
         freezeManager.save();
         positionManager.save();
+        vanishManager.save();
         timer.save();
         config.save();
     }
@@ -77,13 +79,13 @@ public final class Main extends JavaPlugin {
     public void init(PluginManager pluginManager) {
         // Commands
         this.getCommand("back").setExecutor(new BackCommand());
-        this.getCommand("backpack").setExecutor(new BackpackCommand(this));
+        this.getCommand("backpack").setExecutor(new BackpackCommand());
         this.getCommand("build").setExecutor(new BuildCommand());
         this.getCommand("clearchat").setExecutor(new ClearChatCommand());
         this.getCommand("enderchest").setExecutor(new EnderchestCommand());
         this.getCommand("fly").setExecutor(new FlyCommand(this));
-        this.getCommand("freeze").setExecutor(new FreezeCommand());
-        this.getCommand("gamemode").setExecutor(new GamemodeCommand());
+        this.getCommand("freeze").setExecutor(new FreezeCommand(this));
+        this.getCommand("gamemode").setExecutor(new GamemodeCommand(this));
         this.getCommand("heal").setExecutor(new HealCommand(this));
         this.getCommand("ip").setExecutor(new IpCommand());
         this.getCommand("ping").setExecutor(new PingCommand());
@@ -107,6 +109,11 @@ public final class Main extends JavaPlugin {
         return ERROR + target + " has to be in " + gameMode + " mode";
     }
 
+    public String playerNotAvailable(String target) {
+        return ERROR + "The Player " + target + " is not available";
+    }
+
+
     public static Main getInstance() {
         return instance;
     }
@@ -115,16 +122,24 @@ public final class Main extends JavaPlugin {
         return config;
     }
 
-    public FreezeManager getFreezeManager() {
-        return freezeManager;
-    }
-
     public BackpackManager getBackpackManager() {
         return backpackManager;
     }
 
+    public DeathManager getDeathManager() {
+        return deathManager;
+    }
+
+    public FreezeManager getFreezeManager() {
+        return freezeManager;
+    }
+
     public PositionManager getPositionManager() {
         return positionManager;
+    }
+
+    public VanishManager getVanishManager() {
+        return vanishManager;
     }
 
     public Timer getTimer() {

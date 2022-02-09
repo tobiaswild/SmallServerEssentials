@@ -1,5 +1,6 @@
 package de.tobiaswild.newplugin.listeners;
 
+import de.tobiaswild.newplugin.utils.VanishManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -15,7 +16,7 @@ import java.util.Objects;
 
 public class ChatListener implements Listener {
 
-    private YamlConfiguration config = Main.getInstance().getConfiguration().getConfig();
+    private final VanishManager vanishManager = Main.getInstance().getVanishManager();
 
     @EventHandler
     public void onAsyncPlayerChat(AsyncPlayerChatEvent event) {
@@ -27,7 +28,7 @@ public class ChatListener implements Listener {
             player.sendMessage(Main.INFO + "Did you mean \"" + message.replace("7", "/") + "\" ?");
             return;
         }
-        if (config.getBoolean("vanish." + event.getPlayer().getUniqueId())) {
+        if (vanishManager.getVanishedPlayers().contains(event.getPlayer().getUniqueId())) {
             event.setCancelled(true);
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (p.hasPermission(Main.PERMISSION + "vanish.chat")) {

@@ -3,7 +3,7 @@ version: '${project.version}'
 main: de.tobiaswild.newplugin.Main
 api-version: 1.18
 authors: [tobiaswild]
-website: https.//github.com/tobiaswild/
+website: https.//github.com/tobiaswild/NewPlugin
 commands:
     back:
         description: Go back to you death position
@@ -13,11 +13,11 @@ commands:
             - rucksack
         description: open the backpack
     build:
-        description: switch between survival and creative mode.
+        description: switch between survival and creative mode
     clearchat:
         aliases:
             - cc
-        description: Lösche den Chat
+        description: clean the chat
     enderchest:
         aliases:
             - ec
@@ -29,13 +29,13 @@ commands:
     gamemode:
         aliases:
             - gm
-        description: Ächange your gamemode
+        description: change your gamemode
     heal:
         description: Heal a player
     ip:
-        description: Zeigt dir deine IP-Adresse
+        description: Shows your ip adress
     ping:
-        description: Zeigt dir deine Ping
+        description: Shows you ping to the server
     position:
         aliases:
             - pos
@@ -47,6 +47,6 @@ commands:
     vanish:
         aliases:
             - v
-        description: Versteckt dich vor anderen Spielern
+        description: Hide from other players
     see:
         description: see everything

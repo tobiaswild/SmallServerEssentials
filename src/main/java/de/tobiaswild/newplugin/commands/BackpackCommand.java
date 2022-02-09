@@ -3,6 +3,7 @@ package de.tobiaswild.newplugin.commands;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.tobiaswild.newplugin.utils.BackpackManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -14,11 +15,7 @@ import de.tobiaswild.newplugin.utils.Backpack;
 
 public class BackpackCommand implements CommandExecutor, TabCompleter {
 
-    private Main plugin;
-
-    public BackpackCommand(Main plugin) {
-        this.plugin = plugin;
-    }
+    private final BackpackManager backpackManager = Main.getInstance().getBackpackManager();
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -30,7 +27,7 @@ public class BackpackCommand implements CommandExecutor, TabCompleter {
             player.sendMessage(Main.NO_PERMISSION);
             return false;
         }
-        Backpack backpack = plugin.getBackpackManager().getBackpack(player.getUniqueId());
+        Backpack backpack = backpackManager.getBackpack(player.getUniqueId());
         player.openInventory(backpack.getInventory());
         player.sendMessage(Main.SUCCESS + "Opened your Backpack");
         return true;

@@ -1,24 +1,23 @@
 package de.tobiaswild.newplugin.commands;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import de.tobiaswild.newplugin.Main;
+import de.tobiaswild.newplugin.utils.VanishManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import de.tobiaswild.newplugin.Main;
+import java.util.ArrayList;
+import java.util.List;
 
 public class VanishCommand implements CommandExecutor, TabCompleter {
 
-    private Main plugin;
-    private YamlConfiguration config = Main.getInstance().getConfiguration().getConfig();
+    private final Main plugin;
+    private final VanishManager vanishManager = Main.getInstance().getVanishManager();
 
     public VanishCommand(Main plugin) {
         this.plugin = plugin;
@@ -34,20 +33,20 @@ public class VanishCommand implements CommandExecutor, TabCompleter {
             player.sendMessage(Main.NO_PERMISSION);
             return false;
         }
-        if (config.getBoolean("vanish." + player.getUniqueId())) {
-            for (Player all : Bukkit.getOnlinePlayers()) {
-                all.showPlayer(plugin, player);
+        if (vanishManager.getVanishedPlayers().contains(player.getUniqueId())) {
+            vanishManager.removePlayer(player.getUniqueId());
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                p.showPlayer(plugin, player);
             }
-            config.set("vanish." + player.getUniqueId(), false);
             player.removePotionEffect(PotionEffectType.GLOWING);
             player.sendMessage(Main.INFO + "You are now visible again");
         } else {
+            vanishManager.addPlayer(player.getUniqueId());
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (!p.isOp()) {
                     p.hidePlayer(plugin, player);
                 }
             }
-            config.set("vanish." + player.getUniqueId(), true);
             player.addPotionEffect((new PotionEffect(PotionEffectType.GLOWING, 1000000000, 255, false)));
             player.sendMessage(Main.INFO + "You are now vanished");
         }

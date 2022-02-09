@@ -1,9 +1,14 @@
 package de.tobiaswild.newplugin.utils;
 
 import de.tobiaswild.newplugin.Main;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.IOException;
 import java.util.*;
@@ -44,6 +49,7 @@ public class FreezeManager {
                 e.printStackTrace();
             }
         });
+        run();
     }
 
     public void save() {
@@ -57,5 +63,23 @@ public class FreezeManager {
 
     public Set<UUID> getFrozenPlayers() {
         return frozenPlayers.keySet();
+    }
+
+    private void run() {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                sendActionbar();
+            }
+        }.runTaskTimer(Main.getInstance(), 20, 20);
+    }
+
+    public void sendActionbar() {
+        for (UUID uuid : frozenPlayers.keySet()) {
+            Player player = Bukkit.getPlayer(uuid);
+            if (player == null) return;
+            player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
+                    new TextComponent(ChatColor.BLUE + "❄ " + ChatColor.RESET + "you are frozen"));
+        }
     }
 }

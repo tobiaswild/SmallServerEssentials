@@ -1,5 +1,6 @@
 package de.tobiaswild.newplugin.listeners;
 
+import de.tobiaswild.newplugin.utils.VanishManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -13,8 +14,8 @@ import de.tobiaswild.newplugin.Main;
 
 public class ConnectionListener implements Listener {
 
-    private Main plugin;
-    private YamlConfiguration config = Main.getInstance().getConfiguration().getConfig();
+    private final Main plugin;
+    private final VanishManager vanishManager = Main.getInstance().getVanishManager();
 
     public ConnectionListener(Main plugin) {
         this.plugin = plugin;
@@ -22,33 +23,32 @@ public class ConnectionListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        event.setJoinMessage(ChatColor.GREEN + "» " + ChatColor.RESET + event.getPlayer().getDisplayName());
-        // Vanish
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            if (config.getBoolean("vanish." + player.getUniqueId())) {
-                event.getPlayer().hidePlayer(plugin, player);
+        Player player = event.getPlayer();
+        event.setJoinMessage(ChatColor.GREEN + "» " + ChatColor.RESET + player.getDisplayName());
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (vanishManager.getVanishedPlayers().contains(p.getUniqueId())) {
+                player.hidePlayer(plugin, p);
             }
-            if (config.getBoolean("vanish." + event.getPlayer().getUniqueId())) {
+            if (vanishManager.getVanishedPlayers().contains(player.getUniqueId())) {
                 event.setJoinMessage(null);
-                player.hidePlayer(plugin, event.getPlayer());
-                player.sendMessage(Main.INFO + "You are currently vanished");
-                if (player.hasPermission(Main.PERMISSION + "vanish.chat")) {
-                    player.sendMessage(ChatColor.GREEN + "» " + ChatColor.RESET + event.getPlayer().getDisplayName());
+                p.hidePlayer(plugin, player);
+                p.sendMessage(Main.INFO + "You are currently vanished");
+                if (p.hasPermission(Main.PERMISSION + "vanish.chat")) {
+                    p.sendMessage(ChatColor.GREEN + "» " + ChatColor.RESET + player.getDisplayName());
                 }
             }
-
         }
     }
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
-        event.setQuitMessage(ChatColor.RED + "« " + ChatColor.RESET + event.getPlayer().getDisplayName());
-        // Vanish
-        if (config.getBoolean("vanish." + event.getPlayer().getUniqueId())) {
+        Player player = event.getPlayer();
+        event.setQuitMessage(ChatColor.RED + "« " + ChatColor.RESET + player.getDisplayName());
+        if (vanishManager.getVanishedPlayers().contains(player.getUniqueId())) {
             event.setQuitMessage(null);
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                if (player.hasPermission(Main.PERMISSION + "vanish.chat")) {
-                    player.sendMessage(ChatColor.RED + "« " + ChatColor.RESET + event.getPlayer().getDisplayName());
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (p.hasPermission(Main.PERMISSION + "vanish.chat")) {
+                    p.sendMessage(ChatColor.RED + "« " + ChatColor.RESET + player.getDisplayName());
                 }
             }
         }

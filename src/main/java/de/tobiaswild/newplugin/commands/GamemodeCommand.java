@@ -3,6 +3,7 @@ package de.tobiaswild.newplugin.commands;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.tobiaswild.newplugin.utils.FreezeManager;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
@@ -14,8 +15,19 @@ import org.bukkit.entity.Player;
 import de.tobiaswild.newplugin.Main;
 
 public class GamemodeCommand implements CommandExecutor, TabCompleter {
+
+    private final Main plugin;
+
+    public GamemodeCommand (Main plugin) {
+        this.plugin = plugin;
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage(Main.NO_PLAYER);
+            return false;
+        }
         if (!sender.hasPermission(Main.PERMISSION + "gamemode")) {
             sender.sendMessage(Main.NO_PERMISSION);
             return false;
@@ -33,28 +45,34 @@ public class GamemodeCommand implements CommandExecutor, TabCompleter {
                 }
             }
             if (args.length == 1) {
-                if (!(sender instanceof Player player)) {
-                    sender.sendMessage(Main.NO_PLAYER);
+                if (gamemode == player.getGameMode()) {
+                    player.sendMessage(Main.ERROR + "You are already in " + gamemode + " mode");
                     return false;
                 }
                 player.setGameMode(gamemode);
-                player.sendMessage(Main.SUCCESS + "Neuer Spielmodus: " + player.getGameMode());
+                player.sendMessage(Main.SUCCESS + "Your new gamemode is " + gamemode);
                 return true;
             }
             if (args.length == 2) {
                 Player target = Bukkit.getPlayer(args[1]);
-                if (target != null) {
-                    target.setGameMode(gamemode);
-                    target.sendMessage(Main.SUCCESS + "Neuer Spielmodus: " + target.getGameMode());
-                    sender.sendMessage(Main.SUCCESS + "Neuer Spielmodus von " + target.getDisplayName() + ": "
-                            + target.getGameMode());
-                    return true;
+                if (target == null) {
+                    player.sendMessage(plugin.playerNotAvailable(args[0]));
+                    return false;
                 }
+                if (gamemode == target.getGameMode()) {
+                    player.sendMessage(Main.ERROR + target.getDisplayName() + " is already in " + gamemode + " mode");
+                    return false;
+                }
+                target.setGameMode(gamemode);
+                target.sendMessage(Main.SUCCESS + "Your new gamemode is " + gamemode);
+                player.sendMessage(Main.SUCCESS + target.getDisplayName() + " new gamemode is " + gamemode);
+                return true;
+
             } else {
-                sendUsage(sender);
+                sendUsage(player);
             }
         }
-        sendUsage(sender);
+        sendUsage(player);
         return false;
     }
 
