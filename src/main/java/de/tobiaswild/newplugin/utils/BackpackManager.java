@@ -1,11 +1,15 @@
 package de.tobiaswild.newplugin.utils;
 
-import de.tobiaswild.newplugin.Main;
-
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import org.bukkit.configuration.file.YamlConfiguration;
+
+import de.tobiaswild.newplugin.Main;
 
 public class BackpackManager {
 

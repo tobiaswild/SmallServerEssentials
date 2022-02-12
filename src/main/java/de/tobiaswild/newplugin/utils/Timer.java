@@ -1,13 +1,14 @@
 package de.tobiaswild.newplugin.utils;
 
-import de.tobiaswild.newplugin.Main;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import de.tobiaswild.newplugin.Main;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class Timer {
     private boolean running;

@@ -3,7 +3,6 @@ package de.tobiaswild.newplugin.commands;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.tobiaswild.newplugin.utils.BackpackManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -12,6 +11,7 @@ import org.bukkit.entity.Player;
 
 import de.tobiaswild.newplugin.Main;
 import de.tobiaswild.newplugin.utils.Backpack;
+import de.tobiaswild.newplugin.utils.BackpackManager;
 
 public class BackpackCommand implements CommandExecutor, TabCompleter {
 

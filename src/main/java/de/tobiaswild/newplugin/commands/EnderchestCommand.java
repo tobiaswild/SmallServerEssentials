@@ -18,8 +18,8 @@ public class EnderchestCommand implements CommandExecutor, TabCompleter {
             sender.sendMessage(Main.NO_PLAYER);
             return false;
         }
-        if (!sender.hasPermission(Main.PERMISSION + "enderchest")) {
-            sender.sendMessage(Main.NO_PERMISSION);
+        if (!player.hasPermission(Main.PERMISSION + "enderchest")) {
+            player.sendMessage(Main.NO_PERMISSION);
             return false;
         }
         player.openInventory(player.getEnderChest());

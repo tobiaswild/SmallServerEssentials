@@ -1,9 +1,9 @@
 package de.tobiaswild.newplugin.listeners;
 
-import de.tobiaswild.newplugin.utils.VanishManager;
+import java.util.Objects;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,8 +11,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 import de.tobiaswild.newplugin.Main;
-
-import java.util.Objects;
+import de.tobiaswild.newplugin.utils.VanishManager;
 
 public class ChatListener implements Listener {
 

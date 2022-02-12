@@ -1,10 +1,8 @@
 package de.tobiaswild.newplugin;
 
-import de.tobiaswild.newplugin.utils.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -27,13 +25,22 @@ import de.tobiaswild.newplugin.commands.VanishCommand;
 import de.tobiaswild.newplugin.listeners.ChatListener;
 import de.tobiaswild.newplugin.listeners.ConnectionListener;
 import de.tobiaswild.newplugin.listeners.DeathListener;
-import de.tobiaswild.newplugin.listeners.FreezeListener;
+import de.tobiaswild.newplugin.listeners.MoveListener;
+import de.tobiaswild.newplugin.utils.BackpackManager;
+import de.tobiaswild.newplugin.utils.BuildManager;
+import de.tobiaswild.newplugin.utils.Config;
+import de.tobiaswild.newplugin.utils.DeathManager;
+import de.tobiaswild.newplugin.utils.FreezeManager;
+import de.tobiaswild.newplugin.utils.PositionManager;
+import de.tobiaswild.newplugin.utils.Timer;
+import de.tobiaswild.newplugin.utils.VanishManager;
 
 public final class Main extends JavaPlugin {
 
     private static Main instance;
     private Config config;
     private BackpackManager backpackManager;
+    private BuildManager buildManager;
     private DeathManager deathManager;
     private FreezeManager freezeManager;
     private PositionManager positionManager;
@@ -57,6 +64,7 @@ public final class Main extends JavaPlugin {
     @Override
     public void onEnable() {
         backpackManager = new BackpackManager();
+        buildManager = new BuildManager();
         deathManager = new DeathManager();
         freezeManager = new FreezeManager();
         positionManager = new PositionManager();
@@ -68,6 +76,7 @@ public final class Main extends JavaPlugin {
     @Override
     public void onDisable() {
         backpackManager.save();
+        buildManager.save();
         deathManager.save();
         freezeManager.save();
         positionManager.save();
@@ -98,7 +107,7 @@ public final class Main extends JavaPlugin {
         pluginManager.registerEvents(new ChatListener(), this);
         pluginManager.registerEvents(new ConnectionListener(this), this);
         pluginManager.registerEvents(new DeathListener(), this);
-        pluginManager.registerEvents(new FreezeListener(), this);
+        pluginManager.registerEvents(new MoveListener(), this);
     }
 
     public String wrongGamemode(GameMode gameMode) {
@@ -113,7 +122,6 @@ public final class Main extends JavaPlugin {
         return ERROR + "The Player " + target + " is not available";
     }
 
-
     public static Main getInstance() {
         return instance;
     }
@@ -124,6 +132,10 @@ public final class Main extends JavaPlugin {
 
     public BackpackManager getBackpackManager() {
         return backpackManager;
+    }
+
+    public BuildManager getBuildManager() {
+        return buildManager;
     }
 
     public DeathManager getDeathManager() {

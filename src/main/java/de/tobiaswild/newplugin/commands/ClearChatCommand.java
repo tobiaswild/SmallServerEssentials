@@ -28,11 +28,11 @@ public class ClearChatCommand implements CommandExecutor, TabCompleter {
             amount = Integer.parseInt(args[0]);
         }
         for (int i = 0; i <= amount; i++) {
-            for (Player all : Bukkit.getOnlinePlayers()) {
-                all.sendMessage(" \n");
+            for (Player online : Bukkit.getOnlinePlayers()) {
+                online.sendMessage(" \n");
             }
         }
-        sender.sendMessage(Main.SUCCESS + "chat cleared with " + amount + " lines");
+        player.sendMessage(Main.SUCCESS + "chat cleared with " + amount + " lines");
         return true;
     }
 

@@ -1,10 +1,15 @@
 package de.tobiaswild.newplugin.utils;
 
-import de.tobiaswild.newplugin.Main;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+
 import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.util.*;
+import de.tobiaswild.newplugin.Main;
 
 public class DeathManager {
 

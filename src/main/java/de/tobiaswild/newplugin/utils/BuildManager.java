@@ -1,45 +1,51 @@
 package de.tobiaswild.newplugin.utils;
 
-import de.tobiaswild.newplugin.Main;
-
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.ItemStack;
 
-public class BackpackManager {
+import de.tobiaswild.newplugin.Main;
+
+public class BuildManager {
 
     private final YamlConfiguration config = Main.getInstance().getConfiguration().getConfig();
-    private final Map<UUID, Backpack> map;
+    private final Map<UUID, ItemStack[]> map;
 
-    public BackpackManager() {
+    public BuildManager() {
         map = new HashMap<>();
         load();
     }
 
-    public Backpack getBackpack(UUID uuid) {
+    public ItemStack[] getItems(UUID uuid) {
         if (map.containsKey(uuid)) {
             return map.get(uuid);
         }
-        Backpack backpack = new Backpack(uuid);
-        map.put(uuid, backpack);
-        return backpack;
+        ItemStack[] items = new ItemStack[] {};
+        return items;
     }
 
-    public void setBackpack(UUID uuid, Backpack backpack) {
-        map.put(uuid, backpack);
+    public void setItems(UUID uuid, ItemStack[] items) {
+        map.put(uuid, items);
     }
 
     private void load() {
-        List<String> uuids = config.getStringList("backpacks");
+        List<String> uuids = config.getStringList("buildInvs");
         uuids.forEach(s -> {
             UUID uuid = UUID.fromString(s);
-            String base64 = config.getString("backpack." + s);
+            String base64 = config.getString("buildInv." + s);
+            ItemStack[] items = new ItemStack[] {};
             try {
-                map.put(uuid, new Backpack(uuid, base64));
+                items = Base64.itemStackArrayFromBase64(base64);
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            map.put(uuid, items);
         });
     }
 
@@ -48,7 +54,11 @@ public class BackpackManager {
         for (UUID uuid : map.keySet()) {
             uuids.add(uuid.toString());
         }
-        config.set("backpacks", uuids);
-        map.forEach((uuid, backpack) -> config.set("backpack." + uuid.toString(), backpack.toBase64()));
+        config.set("buildInvs", uuids);
+        map.forEach((uuid, items) -> config.set("buildInv." + uuid.toString(), toBase64(items)));
+    }
+
+    public String toBase64(ItemStack[] items) {
+        return Base64.itemStackArrayToBase64(items);
     }
 }

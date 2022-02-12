@@ -20,7 +20,7 @@ public class FreezeCommand implements CommandExecutor, TabCompleter {
     private final Main plugin;
     private final FreezeManager freezeManager = Main.getInstance().getFreezeManager();
 
-    public FreezeCommand (Main plugin) {
+    public FreezeCommand(Main plugin) {
         this.plugin = plugin;
     }
 
@@ -43,18 +43,7 @@ public class FreezeCommand implements CommandExecutor, TabCompleter {
                 target.sendMessage(Main.INFO + "You are now free");
                 sender.sendMessage(Main.SUCCESS + target.getDisplayName() + " is now free");
             } else {
-                int x = (int) target.getLocation().getX();
-                int z = (int) target.getLocation().getZ();
-                int y = Bukkit.getWorld(target.getWorld().getName()).getHighestBlockYAt(x, z);
-                target.teleport(new Location(Bukkit.getWorld("world"), x, y + 2, z));
-                if (target.isFlying()) {
-                    target.setFlying(false);
-                }
-                Location location = new Location(
-                        target.getLocation().getWorld(),
-                        (int) target.getLocation().getX(),
-                        (int) target.getLocation().getY(),
-                        (int) target.getLocation().getZ());
+                Location location = target.getLocation();
                 freezeManager.setFreezePosition(target.getUniqueId(), location);
                 target.playSound(target.getLocation(), Sound.BLOCK_IRON_DOOR_CLOSE, 1, 1);
                 target.sendMessage(Main.INFO + "You are now frozen");

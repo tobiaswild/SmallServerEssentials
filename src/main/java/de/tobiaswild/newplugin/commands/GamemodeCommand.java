@@ -3,7 +3,6 @@ package de.tobiaswild.newplugin.commands;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.tobiaswild.newplugin.utils.FreezeManager;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
@@ -18,7 +17,7 @@ public class GamemodeCommand implements CommandExecutor, TabCompleter {
 
     private final Main plugin;
 
-    public GamemodeCommand (Main plugin) {
+    public GamemodeCommand(Main plugin) {
         this.plugin = plugin;
     }
 

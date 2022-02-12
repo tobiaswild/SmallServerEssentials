@@ -1,7 +1,10 @@
 package de.tobiaswild.newplugin.commands;
 
-import de.tobiaswild.newplugin.Main;
-import de.tobiaswild.newplugin.utils.PositionManager;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -9,10 +12,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import de.tobiaswild.newplugin.Main;
+import de.tobiaswild.newplugin.utils.PositionManager;
 
 public class PositionCommand implements CommandExecutor, TabCompleter {
 
@@ -40,11 +41,7 @@ public class PositionCommand implements CommandExecutor, TabCompleter {
                         player.sendMessage(Main.ERROR + "Config does already contain a position with this name");
                         return false;
                     }
-                    Location location = new Location(
-                            player.getLocation().getWorld(),
-                            (int) player.getLocation().getX(),
-                            (int) player.getLocation().getY(),
-                            (int) player.getLocation().getZ());
+                    Location location = player.getLocation();
                     positionManager.setPosition(posName, location);
                     player.sendMessage(Main.SUCCESS + "Position " + posName + " created");
                     return true;

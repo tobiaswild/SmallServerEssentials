@@ -6,11 +6,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 
 import de.tobiaswild.newplugin.Main;
 import de.tobiaswild.newplugin.utils.DeathManager;
 import de.tobiaswild.newplugin.utils.FreezeManager;
-import org.bukkit.event.player.PlayerRespawnEvent;
 
 public class DeathListener implements Listener {
 

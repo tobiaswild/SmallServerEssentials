@@ -1,10 +1,14 @@
 package de.tobiaswild.newplugin.utils;
 
-import de.tobiaswild.newplugin.Main;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.IOException;
-import java.util.*;
+import de.tobiaswild.newplugin.Main;
 
 public class VanishManager {
 
@@ -17,7 +21,7 @@ public class VanishManager {
     }
 
     public void addPlayer(UUID uuid) {
-       vanishedPlayers.add(uuid);
+        vanishedPlayers.add(uuid);
     }
 
     public void removePlayer(UUID uuid) {

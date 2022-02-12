@@ -1,7 +1,8 @@
 package de.tobiaswild.newplugin.commands;
 
-import de.tobiaswild.newplugin.Main;
-import de.tobiaswild.newplugin.utils.VanishManager;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -11,8 +12,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.ArrayList;
-import java.util.List;
+import de.tobiaswild.newplugin.Main;
+import de.tobiaswild.newplugin.utils.VanishManager;
 
 public class VanishCommand implements CommandExecutor, TabCompleter {
 
