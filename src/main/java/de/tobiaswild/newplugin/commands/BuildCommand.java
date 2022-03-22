@@ -10,6 +10,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import de.tobiaswild.newplugin.Main;
@@ -29,19 +30,19 @@ public class BuildCommand implements CommandExecutor, TabCompleter {
             player.sendMessage(Main.NO_PERMISSION);
             return false;
         }
-        // TODO: Fix Build Inv error
         UUID uuid = player.getUniqueId();
+        Inventory inventory = player.getInventory();
         if (player.getGameMode().equals(GameMode.SURVIVAL)) {
-            buildManager.setItems(uuid, player.getInventory().getContents());
+            buildManager.setItems(uuid, inventory.getContents());
 
             ItemStack[] empty = new ItemStack[] {};
-            player.getInventory().setContents(empty);
+            inventory.setContents(empty);
 
             player.setGameMode(GameMode.CREATIVE);
             player.sendMessage(Main.SUCCESS + "You can now build");
             return true;
         } else if (player.getGameMode().equals(GameMode.CREATIVE)) {
-            player.getInventory().setContents(buildManager.getItems(uuid));
+            inventory.setContents(buildManager.getItems(uuid));
 
             player.setGameMode(GameMode.SURVIVAL);
             player.sendMessage(Main.INFO + "You can now no longer build");

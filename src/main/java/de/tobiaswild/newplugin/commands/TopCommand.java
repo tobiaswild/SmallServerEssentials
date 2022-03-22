@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -30,13 +29,11 @@ public class TopCommand implements CommandExecutor, TabCompleter {
             int z = (int) player.getLocation().getZ();
             int y = Bukkit.getWorld("world").getHighestBlockYAt(x, z);
             player.teleport(new Location(Bukkit.getWorld("world"), x, y + 2, z));
-            player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
         } else {
             int x = (int) Bukkit.getWorld("world").getSpawnLocation().getX();
             int z = (int) Bukkit.getWorld("world").getSpawnLocation().getZ();
             int y = Bukkit.getWorld("world").getHighestBlockYAt(x, z);
             player.teleport(new Location(Bukkit.getWorld("world"), x, y + 1, z));
-            player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
         }
         return true;
     }
