@@ -1,52 +1,54 @@
-name: NewPlugin
-version: '${project.version}'
-main: de.tobiaswild.newplugin.Main
+name: SmallServerEssentials
+version: "${project.version}"
+main: de.tobiaswild.sse.Main
 api-version: 1.18
 authors: [tobiaswild]
-website: https.//github.com/tobiaswild/NewPlugin
+website: https.//github.com/tobiaswild/SmallServerEssentials
 commands:
-    back:
-        description: Go back to you death position
-    backpack:
-        aliases:
-            - bp
-            - rucksack
-        description: open the backpack
-    build:
-        description: switch between survival and creative mode
-    clearchat:
-        aliases:
-            - cc
-        description: clean the chat
-    enderchest:
-        aliases:
-            - ec
-        description: Siehe dir eine Enderchest an
-    fly:
-        description: Go on a big trip with fly
-    freeze:
-        description: freeze a player
-    gamemode:
-        aliases:
-            - gm
-        description: change your gamemode
-    heal:
-        description: Heal a player
-    ip:
-        description: Shows your ip adress
-    ping:
-        description: Shows you ping to the server
-    position:
-        aliases:
-            - pos
-        description: pos
-    timer:
-        description: controll the timer
-    top:
-        description: Teleportiere dich an die Oberfläche
-    vanish:
-        aliases:
-            - v
-        description: Hide from other players
-    see:
-        description: see everything
+  back:
+    description: Go back to you death position
+  backpack:
+    aliases:
+      - bp
+      - rucksack
+    description: open the backpack
+  build:
+    description: switch between survival and creative mode
+  clearchat:
+    aliases:
+      - cc
+    description: clean the chat
+  enderchest:
+    aliases:
+      - ec
+    description: Siehe dir eine Enderchest an
+  fly:
+    description: Go on a big trip with fly
+  freeze:
+    description: freeze a player
+  gamemode:
+    aliases:
+      - gm
+    description: change your gamemode
+  heal:
+    description: Heal a player
+  ip:
+    description: Shows your ip address
+  ping:
+    description: Shows you ping to the server
+  position:
+    aliases:
+      - pos
+    description: pos
+  timer:
+    description: control the timer
+  top:
+    description: Teleportiere dich an die Oberfläche
+  vanish:
+    aliases:
+      - v
+    description: Hide from other players
+  see:
+    description: see everything
+  settings:
+    description: settings
