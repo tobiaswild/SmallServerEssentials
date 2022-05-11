@@ -2,9 +2,11 @@ package de.tobiaswild.sse;
 
 import de.tobiaswild.sse.commands.*;
 import de.tobiaswild.sse.listeners.*;
+import de.tobiaswild.sse.settings.SettingsInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -29,6 +31,7 @@ public final class Main extends JavaPlugin {
   private PositionManager positionManager;
   private VanishManager vanishManager;
   private Timer timer;
+  private SettingsInventory settingsInventory;
 
   public static final String PERMISSION = "sse.",
       ERROR = ChatColor.RED.toString() + ChatColor.BOLD + "! " + ChatColor.RESET,
@@ -53,6 +56,7 @@ public final class Main extends JavaPlugin {
     positionManager = new PositionManager();
     vanishManager = new VanishManager();
     timer = new Timer();
+    settingsInventory = new SettingsInventory();
     init(Bukkit.getPluginManager());
   }
 
@@ -143,4 +147,7 @@ public final class Main extends JavaPlugin {
     return timer;
   }
 
+  public Inventory getSettingsInventory() {
+    return settingsInventory.getSettingsInventory();
+  }
 }

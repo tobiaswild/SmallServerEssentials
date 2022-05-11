@@ -40,6 +40,7 @@ public class SettingsCommand implements CommandExecutor, TabCompleter {
         ItemStack suicide = new ItemStack(Material.RED_DYE);
         ItemStack heal = new ItemStack(Material.GREEN_DYE);
         ItemStack weapon = new ItemStack(Material.DIAMOND_SWORD);
+        ItemStack itemBoolean = new ItemStack(Material.RED_WOOL);
 
         ItemMeta suicideMeta = suicide.getItemMeta();
         suicideMeta.setDisplayName("Suicide");
@@ -48,9 +49,27 @@ public class SettingsCommand implements CommandExecutor, TabCompleter {
         suicideMeta.setLore(suicideLore);
         suicide.setItemMeta(suicideMeta);
 
-        ItemStack[] menuItems = {suicide, heal, weapon};
+        ItemMeta healMeta = heal.getItemMeta();
+        healMeta.setDisplayName("Heal");
+        ArrayList<String> healLore = new ArrayList<>();
+        healLore.add("heal yourself");
+        healMeta.setLore(healLore);
+        heal.setItemMeta(healMeta);
+
+        ItemMeta weaponMeta = weapon.getItemMeta();
+        weaponMeta.setDisplayName("Weapon");
+        ArrayList<String> weaponLore = new ArrayList<>();
+        weaponLore.add("Get a weapon");
+        weaponMeta.setLore(weaponLore);
+        weapon.setItemMeta(weaponMeta);
+
+        ItemMeta booleanMeta = itemBoolean.getItemMeta();
+        booleanMeta.setDisplayName("Boolean");
+        itemBoolean.setItemMeta(booleanMeta);
+
+        ItemStack[] menuItems = {suicide, heal, weapon, itemBoolean};
         settingsInventory.setContents(menuItems);
-        player.openInventory(settingsInventory);
+        player.openInventory(plugin.getSettingsInventory());
         return true;
     }
 

@@ -32,25 +32,34 @@ public class ClickListener implements Listener {
         suicideMeta.setLore(suicideLore);
         suicide.setItemMeta(suicideMeta);
 
+        ItemStack sword = new ItemStack(Material.DIAMOND_SWORD);
+
         Player player = (Player) event.getWhoClicked();
 
         if (event.getClickedInventory().contains(suicide)) {
             switch (event.getCurrentItem().getType()) {
-                case RED_DYE: 
+                case RED_DYE -> {
                     player.closeInventory();
                     player.setHealth(0);
-                    break;
-                case GREEN_DYE:
+                }
+                case GREEN_DYE -> {
                     player.closeInventory();
                     player.setHealth(20);
-                    break;
-                case DIAMOND_SWORD:
-                    player.closeInventory();
-                    player.giveExp(1000);
-                    break;
+                    player.setFoodLevel(20);
+                    player.setSaturation(20);
                 }
-
+                case DIAMOND_SWORD -> {
+                    player.closeInventory();
+                    player.getInventory().addItem(sword);
+                }
+                case RED_WOOL -> {
+                    event.getCurrentItem().setType(Material.GREEN_WOOL);
+                }
+                case GREEN_WOOL -> {
+                    event.getCurrentItem().setType(Material.RED_WOOL);
+                }
             }
             event.setCancelled(true);
         }
     }
+}
